@@ -9,6 +9,9 @@ const UserSchema = new mongoose.Schema({
     minlength: [3, 'Name must be at least 3 characters long'],
     maxlength: [50, 'Name must be at most 50 characters long'],
   },
+  gender: {
+    type: String,
+  },
   phone: {
     type: String,
     minlength: [10, 'Phone number must be at least 10 characters long'],
@@ -30,6 +33,9 @@ const UserSchema = new mongoose.Schema({
   bio: {
     type: String,
     maxlength: [255, 'Bio must be less than 255 characters'],
+  },
+  address: {
+    type: String,
   },
   image: {
     type: String,

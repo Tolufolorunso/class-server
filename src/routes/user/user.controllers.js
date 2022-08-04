@@ -8,13 +8,17 @@ const { findByIdAndUpdate } = require('../../models/user.models');
 const deleteImg = require('../../utils/deleteImage');
 
 const register = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, name, gender } = req.body;
+  if (!email || !password || !name || !gender) {
+    throw new CustomError.BadRequestError('All fields required');
+  }
+
   const userExist = await User.findOne({ email });
   if (userExist) {
     throw new CustomError.BadRequestError('User already exist');
   }
 
-  await User.create({ email, password });
+  await User.create({ email, password, name, gender });
 
   res.status(StatusCodes.CREATED).json({
     status: true,
@@ -74,7 +78,7 @@ const getUser = async (req, res) => {
 const updateProfile = async (req, res) => {
   // const { userID } = req.params;
   // console.log(req.user);
-  const { phone, name, bio, email } = req.body;
+  const { phone, name, bio, email, address, gender } = req.body;
 
   const userProfile = await User.findOne({ _id: req.user._id });
 
@@ -102,6 +106,13 @@ const updateProfile = async (req, res) => {
 
   if (bio) {
     userProfile.bio = bio;
+  }
+
+  if (gender) {
+    userProfile.gender = gender;
+  }
+  if (address) {
+    userProfile.address = address;
   }
 
   await userProfile.save();
