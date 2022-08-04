@@ -8,9 +8,14 @@ const { findByIdAndUpdate } = require('../../models/user.models');
 const deleteImg = require('../../utils/deleteImage');
 
 const register = async (req, res) => {
-  const { email, password, name, gender } = req.body;
-  if (!email || !password || !name || !gender) {
+  const { email, password, confirmPassword, name, gender } = req.body;
+
+  if (!email || !password || !confirmPassword || !name || !gender) {
     throw new CustomError.BadRequestError('All fields required');
+  }
+
+  if (password !== confirmPassword) {
+    throw new CustomError.BadRequestError('Passwords not matched');
   }
 
   const userExist = await User.findOne({ email });
